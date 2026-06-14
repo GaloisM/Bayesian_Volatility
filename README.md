@@ -1,43 +1,45 @@
 # Bayesian Volatility
 
-Minimal research repo for forecasting realized volatility with Bayesian HAR
-models.
+Notebook-first research project for forecasting realized volatility with
+classical HAR and Bayesian HAR models.
 
-The aim is statistical development, not application infrastructure. Keep the
-repo small:
+The main artifact is:
 
-- `prep_data.ipynb` - exploratory analysis and figures
-- `volatility_models.py` - reusable statistical functions
-- `requirements.txt` - Python dependencies
+- `bayesian_volatility_clean.ipynb` - organized research notebook matching the
+  presentation narrative
 
-## Statistical Direction
+The original exploratory notebook is kept as:
 
-The core object is 5-day forward realized variance:
+- `prep_data.ipynb`
+
+## Research Question
+
+Can a Bayesian HAR model improve 5-day realized-volatility forecasts and
+high-volatility warnings compared with simple classical HAR baselines?
+
+The target is:
 
 ```text
-RV_t = log(P_t / P_{t-1})^2
+RV_t = log(S_t / S_{t-1})^2
 RV_forward_5 = mean(RV_{t+1}, ..., RV_{t+5})
 ```
 
-The first serious model family should be HAR on log realized variance:
+The main regression scale is `log(RV_forward_5)`.
 
-```text
-log(RV_forward_5) ~ log(RV_lag_1) + log(RV_mean_5) + log(RV_mean_22)
-```
+## Notebook Structure
 
-Use OLS/Ridge only as benchmarks. The main model should be Bayesian HAR with a
-Student-t likelihood, because volatility forecast errors are heavy-tailed and
-spike-prone.
+The clean notebook follows the presentation:
 
-## Evaluation
-
-Use metrics that make sense for volatility:
-
-- RMSE/MAE/R2 on `log(RV)`
-- RMSE/MAE/R2 on the variance scale
-- QLIKE loss
-- posterior predictive interval coverage
-- warning-signal precision/recall/F1 for high-volatility regimes
+1. Data and target definition
+2. HAR feature construction
+3. Classical OLS/Ridge HAR baselines
+4. Jump/regime HAR extension
+5. Log-HAR model diagnostics
+6. Naive benchmark comparison
+7. Bayesian HAR with Normal likelihood
+8. Bayesian HAR with Student-t likelihood
+9. Posterior predictive intervals
+10. High-volatility warning signals
 
 ## Setup
 
@@ -47,54 +49,27 @@ python -m venv .venv
 python -m pip install -r requirements.txt
 ```
 
-## Example Use
+Then open:
 
-Inside the notebook:
-
-```python
-import yfinance as yf
-from volatility_models import (
-    TARGET,
-    make_har_dataset,
-    train_test_split_time,
-    fit_har_benchmarks,
-    fit_bayesian_har,
-    evaluate_log_forecast,
-    evaluate_posterior_predictive,
-)
-
-prices = yf.download("^GSPC", start="2010-01-01", end="2023-01-01", auto_adjust=True)
-close = prices["Close"]
-
-data = make_har_dataset(close)
-train, test = train_test_split_time(data)
-
-benchmarks = fit_har_benchmarks(train, test)
-
-idata, student_samples = fit_bayesian_har(
-    train,
-    test,
-    likelihood="student",
-    draws=1000,
-    tune=500,
-    chains=2,
-)
-
-rv_true = test["rv_forward_5"].to_numpy()
-evaluate_posterior_predictive(test[TARGET].to_numpy(), student_samples, rv_true)
+```text
+bayesian_volatility_clean.ipynb
 ```
 
-## Next Statistical Steps
+## Statistical Notes
 
-1. Compare Normal vs Student-t Bayesian HAR with posterior predictive checks.
-2. Add VIX as an exogenous predictor, but evaluate whether it improves QLIKE.
-3. Add jump/regime indicators only after the baseline Bayesian HAR is stable.
-4. Report calibration: 80% and 95% interval coverage, not only point error.
-5. Keep the model interpretable before adding more complex stochastic-volatility
-   machinery.
+Use OLS and Ridge as interpretable benchmarks. Treat the Bayesian Student-t HAR
+model as the main specification, because volatility residuals are spike-prone
+and heavy-tailed.
+
+Report more than point error:
+
+- RMSE, MAE, R2 on `log(RV)`
+- RMSE, MAE, R2 on the variance scale
+- QLIKE
+- 80% and 95% posterior predictive interval coverage
+- precision, recall, and F1 for high-volatility warning flags
 
 ## Repo Hygiene
 
 Do not commit virtual environments, raw cached data, generated outputs, or large
-notebook outputs. The remote `functions` branch appears to contain a committed
-virtual environment; future work should stay on a clean branch from `main`.
+notebook scratch outputs.
