@@ -8,8 +8,15 @@ __pycache__/
 .mypy_cache/
 .ruff_cache/
 .ipynb_checkpoints/
+.jupyter-runtime/
+.jupyter-config/
+.ipython/
+.pytensor-cache/
+.numba-cache/
+.matplotlib-cache/
+work/
 
-data/
+data/*
 outputs/
 reports/
 *.nc
@@ -17,6 +24,7 @@ reports/
 *.pickle
 *.parquet
 *.csv
+!data/prices_2010_2023.csv
 
 .DS_Store
 Thumbs.db

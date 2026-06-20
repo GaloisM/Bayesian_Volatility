@@ -85,18 +85,54 @@ forecast error alone.
 
 ## Setup
 
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt
-jupyter lab
+Use Python 3.12. The tested setup is Python 3.12 with the dependencies from
+`requirements.txt`.
+
+Clone the repository:
+
+```bash
+git clone https://github.com/GaloisM/Bayesian_Volatility.git
+cd Bayesian_Volatility
 ```
 
-Then open:
+### Windows PowerShell
+
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+.\run_jupyter.ps1
+```
+
+If PowerShell blocks local scripts, use:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\run_jupyter.ps1
+```
+
+### macOS / Linux
+
+```bash
+python3.12 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+sh run_jupyter.sh
+```
+
+Then open the main notebook:
 
 ```text
 bayesian_volatility_clean.ipynb
 ```
+
+The repository includes `data/prices_2010_2023.csv`, so the notebook can run
+without downloading data from Yahoo Finance. If the file is removed, the data
+cell will attempt to download the same period again and recreate it.
+
+In JupyterLab, select the `Python (.venv Bayesian Volatility)` or `Python 3`
+kernel from the local `.venv`.
 
 ## Metrics
 
