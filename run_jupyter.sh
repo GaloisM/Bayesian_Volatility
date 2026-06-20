@@ -19,8 +19,32 @@ export PYTENSOR_FLAGS="base_compiledir=.pytensor-cache"
 export NUMBA_CACHE_DIR="$PROJECT_ROOT/.numba-cache"
 export MPLCONFIGDIR="$PROJECT_ROOT/.matplotlib-cache"
 
+if [ ! -x "$PROJECT_ROOT/.venv/bin/python" ]; then
+    echo "Creating .venv with Python 3.12..."
+
+    if command -v python3.12 >/dev/null 2>&1; then
+        python3.12 -m venv .venv
+    elif command -v python3 >/dev/null 2>&1; then
+        VERSION=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+        if [ "$VERSION" != "3.12" ]; then
+            echo "Python 3.12 is required, but python3 points to Python $VERSION." >&2
+            exit 1
+        fi
+        python3 -m venv .venv
+    else
+        echo "Python 3.12 was not found. Install it from https://www.python.org/downloads/" >&2
+        exit 1
+    fi
+fi
+
 if [ ! -x "$PROJECT_ROOT/.venv/bin/jupyter-lab" ]; then
-    echo "Missing .venv. Create it and install requirements first." >&2
+    echo "Installing project dependencies into .venv..."
+    "$PROJECT_ROOT/.venv/bin/python" -m pip install --upgrade pip
+    "$PROJECT_ROOT/.venv/bin/python" -m pip install -r requirements.txt
+fi
+
+if [ ! -x "$PROJECT_ROOT/.venv/bin/jupyter-lab" ]; then
+    echo "JupyterLab installation failed." >&2
     exit 1
 fi
 

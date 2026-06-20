@@ -98,12 +98,11 @@ cd Bayesian_Volatility
 ### Windows PowerShell
 
 ```powershell
-py -3.12 -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
 .\run_jupyter.ps1
 ```
+
+The script creates `.venv`, installs all dependencies, and starts JupyterLab.
+Python 3.12 must already be installed.
 
 If PowerShell blocks local scripts, use:
 
@@ -114,12 +113,11 @@ powershell -ExecutionPolicy Bypass -File .\run_jupyter.ps1
 ### macOS / Linux
 
 ```bash
-python3.12 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
 sh run_jupyter.sh
 ```
+
+The script creates `.venv`, installs all dependencies, and starts JupyterLab.
+Python 3.12 must already be installed.
 
 Then open the main notebook:
 
