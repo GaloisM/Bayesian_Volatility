@@ -85,7 +85,7 @@ forecast error alone.
 
 ## Setup
 
-Use Python 3.12. The tested setup is Python 3.12 with the dependencies from
+Use Python 3.13. The tested setup is Python 3.13 with the dependencies from
 `requirements.txt`.
 
 Clone the repository:
@@ -100,13 +100,13 @@ Create a virtual environment.
 On Windows PowerShell:
 
 ```powershell
-py -3.12 -m venv .venv
+py -3.13 -m venv .venv
 ```
 
 On macOS or Linux:
 
 ```bash
-python3.12 -m venv .venv
+python3.13 -m venv .venv
 ```
 
 Install dependencies:
