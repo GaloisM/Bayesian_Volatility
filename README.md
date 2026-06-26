@@ -95,29 +95,49 @@ git clone https://github.com/GaloisM/Bayesian_Volatility.git
 cd Bayesian_Volatility
 ```
 
-### Windows PowerShell
+Create a virtual environment.
+
+On Windows PowerShell:
 
 ```powershell
-.\run_jupyter.ps1
+py -3.12 -m venv .venv
 ```
 
-The script creates `.venv`, installs all dependencies, and starts JupyterLab.
-Python 3.12 must already be installed.
-
-If PowerShell blocks local scripts, use:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File .\run_jupyter.ps1
-```
-
-### macOS / Linux
+On macOS or Linux:
 
 ```bash
-sh run_jupyter.sh
+python3.12 -m venv .venv
 ```
 
-The script creates `.venv`, installs all dependencies, and starts JupyterLab.
-Python 3.12 must already be installed.
+Install dependencies:
+
+On Windows PowerShell:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install --upgrade pip
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+```
+
+On macOS or Linux:
+
+```bash
+.venv/bin/python -m pip install --upgrade pip
+.venv/bin/python -m pip install -r requirements.txt
+```
+
+Start Jupyter:
+
+On Windows PowerShell:
+
+```powershell
+.\.venv\Scripts\jupyter-lab.exe
+```
+
+On macOS or Linux:
+
+```bash
+.venv/bin/jupyter-lab
+```
 
 Then open the main notebook:
 
