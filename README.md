@@ -162,7 +162,3 @@ The notebook reports:
 - posterior predictive interval coverage,
 - warning precision, recall, F1 score, and number of warnings.
 
-## Notes
-
-Do not commit virtual environments, cached data, generated outputs, or large
-notebook scratch files.
